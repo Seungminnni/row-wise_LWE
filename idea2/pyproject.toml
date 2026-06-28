@@ -1,0 +1,7 @@
+[project]
+name = "lwe-idea2"
+version = "0.1.0"
+description = "LWE 1D CNN input ablation experiments"
+requires-python = ">=3.10"
+dependencies = ["torch", "tqdm"]
+
