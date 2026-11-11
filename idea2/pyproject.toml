@@ -3,7 +3,7 @@ name = "lwe-idea2"
 version = "0.1.0"
 description = "Row-wise relation-preserving CNN experiments for sparse binary LWE secret recovery"
 requires-python = ">=3.10"
-license = {text = "Proprietary - prior written permission required for reuse"}
+license = {text = "Research reproduction permitted; other reuse requires prior written permission"}
 dependencies = ["torch", "tqdm"]
 
 [project.optional-dependencies]

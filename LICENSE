@@ -1,29 +1,37 @@
-PROPRIETARY SOURCE CODE NOTICE
+RESEARCH REPRODUCTION AND PERMISSION NOTICE
 
 Copyright (c) 2026 the respective copyright holders.
 All rights reserved.
 
 The original source code and documentation in this repository are made publicly
-available for inspection and presentation of the research. Public availability
-does not grant an open-source license or general permission to use the code.
+available to present the research and allow inspection and reproduction of its
+experiments and results.
 
-Except for rights already granted under GitHub's Terms of Service and acts
-permitted by applicable law, any use (including execution), copying, reuse,
+No separate permission is required to download, copy, install, or execute the
+code solely to reproduce or verify the experiments and results described in the
+associated papers and this repository. Minimal adjustments to the environment
+and experiment settings needed for that reproduction or verification are also
+permitted.
+
+Beyond this permitted reproduction and verification, any use, copying, reuse,
 modification, redistribution, creation of derivative works, or incorporation of
-all or part of the code or documentation into another project requires prior
-written permission from the relevant rights holder(s) or their duly authorized
-representative. This requirement applies to research, educational,
-non-commercial, and commercial uses alike.
+all or part of the original code or documentation into another project requires
+prior written permission from the relevant rights holder(s) or their duly
+authorized representative. This requirement applies to research, educational,
+non-commercial, and commercial uses alike. Public availability does not grant an
+open-source license or general permission for reuse.
 
-Permission requests should be directed to the repository maintainer. Any
-permission must come from the relevant rights holder(s) or their duly authorized
-representative and applies only within the scope expressly approved in writing.
-Citing the associated papers does not by itself constitute permission to use the
-code.
+Requests for permission beyond the permitted reproduction should be directed to
+the repository maintainer. Any additional permission must come from the relevant
+rights holder(s) or their duly authorized representative and applies only within
+the scope expressly approved in writing. Citing the associated papers does not
+by itself authorize uses beyond the permitted reproduction.
 
-This notice does not grant any patent license, including a license under any
-pending patent application. Third-party materials and dependencies remain
-subject to their respective licenses; this notice does not replace those terms.
+All permissions in this notice are limited to the inspection, reproduction, and
+verification described above. No patent license is granted for uses beyond that
+scope, including under any pending patent application. Third-party materials and
+dependencies remain subject to their respective licenses; this notice does not
+replace those terms.
 
 Nothing in this notice restricts rights already granted under GitHub's Terms of
 Service, including viewing and forking public repositories within the service,
@@ -31,23 +39,29 @@ or acts permitted by applicable law.
 
 한국어 안내
 
-본 저장소의 자체 소스코드와 문서는 연구 내용의 소개와 열람을 목적으로
-공개합니다. 공개되어 있다는 이유만으로 오픈소스 라이선스나 일반적인
-코드 사용 허락이 부여되는 것은 아닙니다.
+본 저장소의 자체 소스코드와 문서는 연구 내용의 소개와 열람 그리고 재현의
+목적으로 공개합니다.
 
-GitHub 서비스 약관에 따라 이미 부여되는 권리와 관련 법령에서 허용하는
-행위를 제외하고, 코드 또는 문서의 전부 또는 일부를 사용(실행 포함), 복제,
+관련 논문과 본 저장소에 제시된 실험·결과를 재현하거나 검증하기 위한
+코드의 다운로드·복제·설치·실행은 별도의 허락 없이 허용합니다. 해당 재현이나
+검증에 필요한 최소한의 환경·실험 설정 조정도 허용합니다.
+
+위 재현 및 검증 범위를 넘어 코드 또는 문서의 전부 또는 일부를 사용, 복제,
 재사용, 수정, 재배포하거나 파생물을 작성하고 다른 프로젝트에 포함하려면
 저자 중 해당 권리자 또는 그 권한을 위임받은 자의 사전 서면 허락을 받아야
 합니다. 연구·교육·비상업적 목적과 상업적 목적 모두에 이 조건이 적용됩니다.
+공개되어 있다는 이유만으로 오픈소스 라이선스나 일반적인 재사용 허락이
+부여되는 것은 아닙니다.
 
-사용 허락은 저장소 관리자에게 문의해 주십시오. 사용 허락은 해당 권리자
-또는 적법한 권한을 가진 대리인이 서면으로 승인한 범위에 한하여 부여됩니다.
-관련 논문을 인용하는 것만으로 코드 사용 허락을 받은 것으로 보지 않습니다.
+위 재현 범위를 넘어서는 사용 허락은 저장소 관리자에게 문의해 주십시오.
+추가 사용 허락은 해당 권리자 또는 적법한 권한을 가진 대리인이 서면으로
+승인한 범위에 한하여 부여됩니다. 관련 논문을 인용하는 것만으로 재현 범위를
+넘어서는 사용 허락이 부여되지는 않습니다.
 
-본 공지는 특허권 또는 출원 중인 특허에 관한 실시권을 부여하지 않습니다.
-제3자 자료와 외부 의존성에는 각자의 라이선스가 적용되며, 본 공지는 해당
-조건을 대체하지 않습니다.
+본 공지의 허락은 위에 명시한 열람·재현·검증 범위에 한정됩니다. 해당 범위를
+넘어서는 특허권 또는 출원 중인 특허의 실시권은 부여하지 않습니다. 제3자
+자료와 외부 의존성에는 각자의 라이선스가 적용되며, 본 공지는 해당 조건을
+대체하지 않습니다.
 
 GitHub 서비스 약관에 따라 이미 부여되는 플랫폼 내 이용권(공개 저장소의
 열람 및 fork 등)과 관련 법령에서 허용하는 행위는 본 공지로 제한하지 않습니다.

@@ -3,11 +3,15 @@
 Relation-preserving encoders for experiments that predict an LWE secret `s`
 from `A, b` where `b = A s + e (mod q)`.
 
-The source is published for inspection. Use, reuse, modification, and
-redistribution require prior written permission from the relevant rights
-holder(s) or their authorized representative, except where permitted by
-applicable law or GitHub's Terms of Service. See [LICENSE](../LICENSE).
-The installation and execution examples below are for authorized users.
+The source is published to present the research and allow inspection and
+reproduction of its experiments and results. Downloading, copying, installing,
+and running the code to reproduce or verify the experiments in the associated
+papers and this repository requires no separate permission. Minimal environment
+and experiment-setting adjustments needed for reproduction are also permitted.
+Reuse, modification, or redistribution beyond that scope requires prior written
+permission from the relevant rights holder(s) or their authorized representative,
+except where permitted by applicable law or GitHub's Terms of Service.
+See [LICENSE](../LICENSE) for the full terms.
 
 The initial implementation focuses on small fixed LWE parameters and provides:
 

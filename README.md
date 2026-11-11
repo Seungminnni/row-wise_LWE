@@ -14,9 +14,11 @@ b = A s + e (mod q)
 
 ## 사용권 안내
 
-본 저장소의 소스코드는 연구 내용의 소개와 열람을 목적으로 공개합니다. 코드의 전부 또는 일부를 사용·재사용·수정·재배포하거나 다른 프로젝트에 포함하려면 저자 중 해당 권리자 또는 그 권한을 위임받은 자의 사전 서면 허락을 받아야 합니다. 연구·교육·비상업적 목적의 사용도 자동으로 허용되지 않습니다.
+본 저장소의 소스코드는 연구 내용의 소개와 열람 그리고 재현의 목적으로 공개합니다. 관련 논문과 본 저장소에 제시된 실험·결과의 재현 및 검증을 위한 다운로드·복제·설치·실행과 이에 필요한 최소한의 환경·실험 설정 조정은 별도의 허락 없이 허용합니다.
 
-GitHub 서비스 약관에 따라 이미 부여되는 플랫폼 내 이용권(열람 및 fork 등)과 관련 법령에서 허용하는 행위는 위 제한의 대상에서 제외됩니다. 논문을 인용하는 것만으로 코드 사용 허락을 받은 것으로 보지 않으며, 본 공지는 특허권이나 출원 중인 특허에 관한 실시권을 부여하지 않습니다.
+위 재현 범위를 넘어 코드의 전부 또는 일부를 재사용·수정·재배포하거나 다른 프로젝트에 포함하려면 저자 중 해당 권리자 또는 그 권한을 위임받은 자의 사전 서면 허락을 받아야 합니다. 이 조건은 연구·교육·비상업적 목적과 상업적 목적 모두에 적용됩니다.
+
+GitHub 서비스 약관에 따라 이미 부여되는 플랫폼 내 이용권(열람 및 fork 등)과 관련 법령에서 허용하는 행위는 위 제한의 대상에서 제외됩니다. 논문을 인용하는 것만으로 재현 범위를 넘어서는 사용 허락이 부여되지는 않으며, 본 공지는 위 재현 범위를 넘어서는 특허권이나 출원 중인 특허의 실시를 허락하지 않습니다.
 
 사용 허락은 저장소 관리자에게 문의해 주십시오. 자세한 조건은 [LICENSE](LICENSE)에 명시되어 있습니다.
 
@@ -34,7 +36,7 @@ references.bib  관련 학술대회 논문 두 편의 BibTeX
 
 ## 설치와 검증
 
-아래 설치·실행 예시는 해당 권리자의 사용 허락을 받은 경우를 위한 안내입니다.
+아래 설치·실행 예시는 관련 논문과 본 저장소의 실험을 재현하기 위해 별도의 허락 없이 사용할 수 있습니다.
 
 Python 3.10 이상에서 저장소 루트를 기준으로 실행한다.
 
@@ -163,6 +165,6 @@ python scripts/train.py \
 
 이 저장소의 관계 보존형 CNN 입력 표현과 희소 LWE 비밀키 복구 실험에 관한 학술대회 논문이다. 두 논문 모두 DOI가 없다. 인용용 BibTeX는 [references.bib](references.bib)에 제공한다.
 
-1. Seungmin-Lee, Jian-Woo, & Sejong-Lee (2026-07-09). A Convolutional Secret Recovery Model Based on Relation-Preserved LWE Samples. Proceedings of the Korean Society of Computer Information Conference, 제주.
+1. Seungmin-Lee, Jian-Woo, & Sejong-Lee (2026-07-09). A Convolutional Secret Recovery Model Based on Relation-Preserved LWE Samples. Proceedings of the Korean Society of Computer Information Conference, Jeju.
 
-2. Lee, S., Woo, J., Jo, S., Jin, M., Park, I., Jeon, J., & Lee, S. (2026-06-23). Relation-Preserving Convolutional Learning for Sparse LWE Secret Recovery. 대한전자공학회 학술대회, 제주.
+2. Lee, S., Woo, J., Jo, S., Jin, M., Park, I., Jeon, J., & Lee, S. (2026-06-23). Relation-Preserving Convolutional Learning for Sparse LWE Secret Recovery. Summer Annual Conference of IEIE, Institute of Electronics and Information Engineers (IEIE), Jeju.
