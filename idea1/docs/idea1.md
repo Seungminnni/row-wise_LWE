@@ -1,6 +1,8 @@
-# Idea 1: LWE Relation-Row Tokenization
+# 관계 보존형 LWE 행 토큰화와 모델 비교
 
 이 문서는 현재까지 구현하고 성공/비교한 1차 아이디어를 고정 기록으로 남긴다.
+
+과거 실험의 설정과 결과를 보존한 문서이며 원시 로그와 체크포인트는 저장소에 포함되어 있지 않다. 현재 실행법은 [idea1 README](../README.md), 관계 보존형 CNN 논문 두 편의 서지정보는 [관련 논문과 인용](../../README.md#관련-논문과-인용)을 참조한다.
 
 ## 핵심 아이디어
 
@@ -340,9 +342,9 @@ Idea 1은 다음을 보여준다.
 row_block, n=10, m=128:
 
 ```bash
-cd /home/yu_mcc/vit_PQC
+cd idea1
 
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train_lwe_vit.py \
+python scripts/train_lwe_vit.py \
   --model row_block \
   --run-name raw_ceonly_bc10_h2_n10_m128_100k_10k_10k_ep150_e128_d4 \
   --h-setting fixed_h --fixed-h 2 \
@@ -366,9 +368,9 @@ PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train
 equation_transformer, n=10, m=128:
 
 ```bash
-cd /home/yu_mcc/vit_PQC
+cd idea1
 
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train_lwe_vit.py \
+python scripts/train_lwe_vit.py \
   --model equation_transformer \
   --run-name raw_ceonly_eqtrans_h2_n10_m128_100k_10k_10k_ep150_e128_d4 \
   --h-setting fixed_h --fixed-h 2 \
@@ -391,9 +393,9 @@ PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train
 row_cnn, n=10, m=128:
 
 ```bash
-cd /home/yu_mcc/vit_PQC
+cd idea1
 
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train_lwe_vit.py \
+python scripts/train_lwe_vit.py \
   --model row_cnn \
   --run-name raw_ceonly_rowcnn_h2_n10_m128_100k_10k_10k_ep150_e128_d4 \
   --h-setting fixed_h --fixed-h 2 \

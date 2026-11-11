@@ -26,6 +26,10 @@ class LWEDataConfig:
             raise ValueError("input_mode must be relation_pair, b_shuffle, or b_once.")
         if self.h_setting not in {"fixed_h", "variable_h"}:
             raise ValueError("h_setting must be fixed_h or variable_h.")
+        if self.h_setting == "fixed_h" and not 0 <= self.fixed_h <= self.params.n:
+            raise ValueError("fixed_h must be in [0,n].")
+        if self.h_setting == "variable_h" and not 0 <= self.h_min <= self.h_max <= self.params.n:
+            raise ValueError("expected 0 <= h_min <= h_max <= n.")
 
 
 class LWEAblationDataset(Dataset):

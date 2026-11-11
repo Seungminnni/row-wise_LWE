@@ -1,6 +1,9 @@
 import torch
 
-from .data import centered_mod
+if __package__ in (None, ""):
+    from data import centered_mod
+else:
+    from .data import centered_mod
 
 
 @torch.no_grad()

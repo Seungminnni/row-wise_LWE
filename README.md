@@ -1,6 +1,6 @@
-# vit_PQC
+# Row-wise LWE Secret Recovery
 
-Sparse binary LWE secret-support recovery experiments.
+관계 보존형 입력 표현을 이용한 희소 이진 LWE 비밀키 복구 실험.
 
 이 저장소는 작은 synthetic LWE 설정에서
 
@@ -12,16 +12,43 @@ b = A s + e (mod q)
 
 메인 평가지표는 `exact_match` / `exact_recovery_rate`와 `support_f1`이다. `coord_acc`는 sparse secret에서 all-zero baseline도 높게 나올 수 있으므로 보조 지표로만 본다.
 
-## Repository Layout
+## 사용권 안내
+
+본 저장소의 소스코드는 연구 내용의 소개와 열람을 목적으로 공개합니다. 코드의 전부 또는 일부를 사용·재사용·수정·재배포하거나 다른 프로젝트에 포함하려면 저자 중 해당 권리자 또는 그 권한을 위임받은 자의 사전 서면 허락을 받아야 합니다. 연구·교육·비상업적 목적의 사용도 자동으로 허용되지 않습니다.
+
+GitHub 서비스 약관에 따라 이미 부여되는 플랫폼 내 이용권(열람 및 fork 등)과 관련 법령에서 허용하는 행위는 위 제한의 대상에서 제외됩니다. 논문을 인용하는 것만으로 코드 사용 허락을 받은 것으로 보지 않으며, 본 공지는 특허권이나 출원 중인 특허에 관한 실시권을 부여하지 않습니다.
+
+사용 허락은 저장소 관리자에게 문의해 주십시오. 자세한 조건은 [LICENSE](LICENSE)에 명시되어 있습니다.
+
+## 저장소 구성
 
 ```text
 idea1/   ViT/Transformer 기반 relation-preserving encoder 탐색
 idea2/   1D CNN 기반 입력 표현 ablation 및 최종 비교 실험
-result/  생성된 그림, CSV, checkpoint, 로그 모음
-runs/    이전/기타 실험 산출물
+references.bib  관련 학술대회 논문 두 편의 BibTeX
 ```
 
-`result/`, `runs/`, checkpoint, log, local environment 파일은 기본적으로 git에서 제외한다.
+학습 결과는 각 실험의 `runs/`에, 그림은 스크립트의 `--output-dir`에 생성된다.
+`result/`, `runs/`, checkpoint, log, 로컬 환경과 논문 원문은 Git에서 제외하며,
+이 저장소에는 과거 실험의 원시 로그와 체크포인트가 포함되어 있지 않다.
+
+## 설치와 검증
+
+아래 설치·실행 예시는 해당 권리자의 사용 허락을 받은 경우를 위한 안내입니다.
+
+Python 3.10 이상에서 저장소 루트를 기준으로 실행한다.
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ./idea1 -e './idea2[plots]'
+
+python -m unittest discover -s idea1/tests -v
+python -m unittest discover -s idea2/tests -v
+```
+
+학습만 실행하려면 `./idea2[plots]` 대신 `./idea2`를 설치해도 된다.
+`--device auto`는 CUDA를 사용할 수 있으면 CUDA를, 그 외에는 CPU를 선택한다.
 
 ## Idea 1
 
@@ -39,7 +66,7 @@ LWE row equation의 구조를 보존한 tokenization이 secret recovery에 도�
 X[i,j] = [ENC(A[i,j]), ENC(b[i])]
 ```
 
-이 표현을 row/column block token으로 만들고, ViT-style model이 coordinate-wise secret bit를 예측한다. `row_block` 구조가 가장 명확히 성공한 축이며, `phase` encoding은 학습을 빠르게 만들지만 핵심은 additional Fourier harmonic이 아니라 row-equation token 구조라는 결론에 가깝다. `raw` encoding도 충분한 `m`, epoch에서는 성공했다.
+이 표현을 row/column block token으로 만들고, ViT-style model이 coordinate-wise secret bit를 예측한다. 과거 실험 기록에서는 `row_block`의 복구 성공과 `raw` 및 `phase` 인코딩의 차이를 보고했다. 세부 조건과 수치는 [실험 기록](idea1/docs/lwe_vit_experiment_state.md)에 남겨 두었다.
 
 주요 코드:
 
@@ -52,7 +79,7 @@ X[i,j] = [ENC(A[i,j]), ENC(b[i])]
 
 ## Idea 2
 
-`idea2`는 최종 주장에 더 가까운, 작고 선명한 1D CNN 입력 표현 ablation이다. 목표는 모델 경쟁이 아니라 `b`를 썼기 때문에 되는 것인지, 아니면 같은 row의 `A_i`와 `b_i` 대응을 coordinate-level로 보존했기 때문에 되는 것인지 분리해서 확인하는 것이다.
+`idea2`는 아래 [관련 논문](#관련-논문과-인용)의 관계 보존형 표현을 비교하는 1D CNN 입력 표현 ablation이다. 같은 row의 `A_i`와 `b_i` 대응, 그리고 각 coefficient 옆에 `b_i`를 반복해 배치하는 방식이 복구 성능에 미치는 영향을 확인한다.
 
 네 가지 비교군은 다음과 같다.
 
@@ -72,7 +99,7 @@ All-zero:
   s_hat = 0
 ```
 
-`relation_pair`, `b_shuffle`, `b_once`는 같은 1D CNN row-pooling backbone을 쓰고 `--input-mode`만 바꾼다. `all_zero`는 학습 없이 baseline metric만 계산한다.
+`relation_pair`, `b_shuffle`, `b_once`는 같은 종류의 1D CNN row-pooling backbone을 쓰고 `--input-mode`를 바꾼다. `b_once`는 입력 채널 수와 시퀀스 길이가 다르므로 파라미터 수까지 완전히 같지는 않다. `all_zero`는 고정 헤밍 무게에 대한 이론적 baseline metric을 학습 없이 계산한다.
 
 주요 코드:
 
@@ -82,18 +109,18 @@ All-zero:
 - `idea2/src/lwe_idea2/metrics.py`: exact recovery, support F1, all-zero baseline metric
 - `idea2/scripts/plot_*.py`: t-SNE 및 결과 그림 생성
 
-대표 비교는 `n=10, m=40`과 `n=16, m=64`에서 seed 0-2 평균으로 정리했다. 포스터/보고서용 최종 그림과 CSV는 `result/plots/`와 `result/` 아래에 생성되어 있다.
+논문의 대표 비교는 `n=10, m=40`과 `n=16, m=64`에서 seed 0–2의 평균과 표준편차로 정리되어 있다. [idea2 설명](idea2/README.md)에 논문에 보고된 결과와 실행 예시를 정리했다.
 
 자세한 실행 예시는 `idea2/README.md`를 본다.
 
-## Reproducing The Main Idea 2 Runs
+## 주요 CNN 비교 실험 실행
 
-예를 들어 `n=10, m=40`의 Proposed run은 다음처럼 실행했다.
+저장소 루트에서 `n=10, m=40`의 Proposed run을 다음처럼 실행한다.
 
 ```bash
-cd /home/yu_mcc/vit_PQC/idea2
+cd idea2
 
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train.py \
+python scripts/train.py \
   --input-mode relation_pair \
   --run-name n10_h2_noise3_m40_relation_pair_cnn1d_10k_1k_1k_ep100_seed0 \
   --n 10 --m 40 --q 257 \
@@ -105,13 +132,13 @@ PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train
   --hidden-channels 64 --depth 3 \
   --lr 3e-4 --weight-decay 1e-4 \
   --dropout 0.05 --decode top_h \
-  --seed 0 --num-workers 8 --device auto
+  --seed 0 --num-workers 0 --device auto
 ```
 
-같은 설정에서 `--input-mode`를 `b_shuffle`, `b_once`로 바꾸고 seed를 `0,1,2`로 반복하면 ablation 결과를 재현할 수 있다. `all_zero`는 다음처럼 따로 계산한다.
+같은 설정에서 `--input-mode`를 `b_shuffle`, `b_once`로 바꾸고 seed를 `0,1,2`로 반복한다. 각 실행의 `--run-name`도 모드와 seed에 맞춰 바꿔 결과가 덮어써지지 않게 한다. `n=16` 비교에는 `--n 16 --m 64 --epochs 200`을 사용한다. `all_zero`는 같은 `idea2/` 디렉터리에서 다음처럼 계산한다.
 
 ```bash
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train.py \
+python scripts/train.py \
   --input-mode all_zero \
   --run-name n10_h2_noise3_m40_all_zero_baseline \
   --n 10 --m 40 --q 257 \
@@ -120,10 +147,22 @@ PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train
   --num-test 1000 --seed 0
 ```
 
-## Interpretation Guide
+## 결과 해석
 
-`Proposed >> B-shuffle`이면 row-wise `A_i, b_i` alignment가 핵심이라는 근거다.
+`Proposed >> B-shuffle`이면 해당 실험 조건에서 row-wise `A_i, b_i` alignment가 유효한 신호라는 근거다.
 
-`Proposed >> B-once`이면 단순히 `b`를 제공한 효과가 아니라 coordinate-level `A_ij, b_i` pairing이 중요하다는 근거다.
+`Proposed >> B-once`이면 이 CNN에서 coordinate-level `A_ij, b_i` pairing이 유리하다는 근거다. 입력 채널 수, 시퀀스 길이, 정규화 방식의 영향도 함께 고려해야 한다.
 
 `B-once`가 Proposed에 가까우면 현재 작은 파라미터가 쉬워서 row 끝의 `b_i`만으로도 충분한 신호가 될 수 있음을 뜻한다. 따라서 `n=16`처럼 조금 더 어려운 설정에서 격차를 같이 보는 것이 중요하다.
+
+각 데이터 항목은 독립적으로 생성한 `(A,b,s,e)`이며 train/val/test는 서로 다른 seed offset을 사용한다. 같은 support가 다른 split에 등장하는 것은 허용된다. 고정 헤밍 무게 `h=2`에서 가능한 support는 `n=10`이면 45개, `n=16`이면 120개이므로, 이 결과는 새로운 공개 샘플에 대한 평가이며 보지 못한 support 조합으로의 일반화를 검증한 결과는 아니다.
+
+`--decode top_h`는 헤밍 무게를 알고 있다고 가정한다. 이 조건을 완화하려면 `--decode threshold`를 사용한다. 논문 규모의 장기 실험은 별도로 실행해야 하며, 아래 논문 수치는 현재 코드로 새로 측정한 값이 아니다.
+
+## 관련 논문과 인용
+
+이 저장소의 관계 보존형 CNN 입력 표현과 희소 LWE 비밀키 복구 실험에 관한 학술대회 논문이다. 두 논문 모두 DOI가 없다. 인용용 BibTeX는 [references.bib](references.bib)에 제공한다.
+
+1. Seungmin-Lee, Jian-Woo, & Sejong-Lee (2026-07-09). A Convolutional Secret Recovery Model Based on Relation-Preserved LWE Samples. Proceedings of the Korean Society of Computer Information Conference, 제주.
+
+2. Lee, S., Woo, J., Jo, S., Jin, M., Park, I., Jeon, J., & Lee, S. (2026-06-23). Relation-Preserving Convolutional Learning for Sparse LWE Secret Recovery. 대한전자공학회 학술대회, 제주.

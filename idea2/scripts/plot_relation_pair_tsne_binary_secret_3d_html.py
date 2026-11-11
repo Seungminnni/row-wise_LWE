@@ -46,7 +46,7 @@ def tsne_3d(x: np.ndarray, seed: int, perplexity: float, max_iter: int) -> np.nd
         n_components=3,
         init="pca",
         learning_rate="auto",
-        perplexity=min(perplexity, max(5.0, (x.shape[0] - 1) / 3.0)),
+        perplexity=min(perplexity, max(1.0, (x.shape[0] - 1) / 3.0)),
         random_state=seed,
         max_iter=max_iter,
     ).fit_transform(x)
@@ -174,14 +174,14 @@ def html_document(payload: dict) -> str:
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">Before CNN</div>
-        <div class="hint">flatten coordinate input: m x 2</div>
+        <div class="hint">flatten coordinate input: m x {payload['input_channels']}</div>
       </div>
       <canvas id="before"></canvas>
     </div>
     <div class="panel">
       <div class="panel-header">
         <div class="panel-title">After CNN</div>
-        <div class="hint">flatten coordinate feature: m x 64</div>
+        <div class="hint">flatten coordinate feature: m x {payload['hidden_channels']}</div>
       </div>
       <canvas id="after"></canvas>
     </div>
@@ -359,6 +359,8 @@ def main() -> None:
     meta_path = args.output_dir / "relation_pair_tsne_secret_bit_0_1_before_after_cnn_3d_meta.json"
 
     payload = {
+        "input_channels": shapes["cnn_input_row_tensor"][1],
+        "hidden_channels": shapes["cnn_output_row_tensor"][1],
         "before": before_3d.round(6).tolist(),
         "after": after_3d.round(6).tolist(),
         "labels": y.astype(int).tolist(),

@@ -154,7 +154,7 @@ def tsne_2d(x: np.ndarray, seed: int, perplexity: float, max_iter: int) -> np.nd
         n_components=2,
         init="pca",
         learning_rate="auto",
-        perplexity=min(perplexity, max(5.0, (x.shape[0] - 1) / 3.0)),
+        perplexity=min(perplexity, max(1.0, (x.shape[0] - 1) / 3.0)),
         random_state=seed,
         max_iter=max_iter,
     ).fit_transform(x)

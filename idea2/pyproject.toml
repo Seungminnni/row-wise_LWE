@@ -1,7 +1,18 @@
 [project]
 name = "lwe-idea2"
 version = "0.1.0"
-description = "LWE 1D CNN input ablation experiments"
+description = "Row-wise relation-preserving CNN experiments for sparse binary LWE secret recovery"
 requires-python = ">=3.10"
+license = {text = "Proprietary - prior written permission required for reuse"}
 dependencies = ["torch", "tqdm"]
+
+[project.optional-dependencies]
+plots = ["matplotlib>=3.7", "numpy>=1.24", "scikit-learn>=1.5"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
 

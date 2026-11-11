@@ -109,7 +109,7 @@ def collect_coordinate_embeddings(args: argparse.Namespace, device: torch.device
 
         row_input = model._relation_pair_input(A, b_input)
         shapes["cnn_input_row_tensor"] = tuple(row_input.shape)
-        input_features = row_input.reshape(batch_size, m, 2, n).permute(0, 3, 1, 2).reshape(batch_size * n, m * 2)
+        input_features = row_input.reshape(batch_size, m, model.in_channels, n).permute(0, 3, 1, 2).reshape(batch_size * n, m * model.in_channels)
         before_rows.append(input_features.cpu())
 
         row_features = model.blocks(model.stem(row_input))
@@ -159,7 +159,7 @@ def tsne_2d(x: np.ndarray, seed: int, perplexity: float, max_iter: int) -> np.nd
         n_components=2,
         init="pca",
         learning_rate="auto",
-        perplexity=min(perplexity, max(5.0, (x.shape[0] - 1) / 3.0)),
+        perplexity=min(perplexity, max(1.0, (x.shape[0] - 1) / 3.0)),
         random_state=seed,
         max_iter=max_iter,
     ).fit_transform(x)

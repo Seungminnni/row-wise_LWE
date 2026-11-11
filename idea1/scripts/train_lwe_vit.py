@@ -788,7 +788,7 @@ def train_single_seed(args: argparse.Namespace, run_seed: int, device: torch.dev
             best_train_metrics = dict(train_metrics)
             best_train_loss = train_loss
             best_train_eval_loss = train_eval_loss
-            best_state = {key: value.detach().cpu() for key, value in model.state_dict().items()}
+            best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
             epochs_without_improvement = 0
             if args.save_best:
                 torch.save(best_state, seed_dir / "best.pt")

@@ -17,10 +17,9 @@ from torch.utils.data import DataLoader, Subset
 ROOT = Path(__file__).resolve().parent
 
 if __package__ in (None, ""):
-    sys.path.append(str(Path(__file__).resolve().parent.parent))
-    from lwe_image_experiment.data import DatasetSpec, SyntheticLWEDataset
-    from lwe_image_experiment.metrics import batch_statistics, finalize_statistics, merge_statistics
-    from lwe_image_experiment.models import build_model
+    from data import DatasetSpec, SyntheticLWEDataset
+    from metrics import batch_statistics, finalize_statistics, merge_statistics
+    from models import build_model
 else:
     from .data import DatasetSpec, SyntheticLWEDataset
     from .metrics import batch_statistics, finalize_statistics, merge_statistics
@@ -755,7 +754,7 @@ def train_single_seed(args: argparse.Namespace, run_seed: int, device: torch.dev
                 best_train_loss = train_loss
                 best_train_eval_loss = train_eval_loss
                 best_train_metrics = dict(train_metrics)
-                best_state = {key: value.detach().cpu() for key, value in model.state_dict().items()}
+                best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
                 epochs_without_improvement = 0
             else:
                 epochs_without_improvement += 1

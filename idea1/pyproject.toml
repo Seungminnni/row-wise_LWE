@@ -7,6 +7,7 @@ name = "lwe-vit"
 version = "0.1.0"
 description = "Relation-preserving LWE image and token encoders for ViT secret recovery experiments."
 requires-python = ">=3.10"
+license = {text = "Proprietary - prior written permission required for reuse"}
 dependencies = [
     "matplotlib>=3.7",
     "torch>=2.0",

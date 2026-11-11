@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from pathlib import Path
@@ -129,20 +130,19 @@ def tsne_2d(x: np.ndarray, seed: int, perplexity: float, max_iter: int) -> np.nd
         n_components=2,
         init="pca",
         learning_rate="auto",
-        perplexity=min(perplexity, max(5.0, (x.shape[0] - 1) / 3.0)),
+        perplexity=min(perplexity, max(1.0, (x.shape[0] - 1) / 3.0)),
         random_state=seed,
         max_iter=max_iter,
     ).fit_transform(x)
 
 
 def save_coordinates(path: Path, before_2d: np.ndarray, after_2d: np.ndarray, labels: list[str]) -> None:
-    with path.open("w") as handle:
-        handle.write("sample,secret_support,before_x,before_y,after_x,after_y\n")
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["sample", "secret_support", "before_x", "before_y", "after_x", "after_y"])
         for idx, label in enumerate(labels):
-            handle.write(
-                f"{idx},{label},{before_2d[idx, 0]:.8f},{before_2d[idx, 1]:.8f},"
-                f"{after_2d[idx, 0]:.8f},{after_2d[idx, 1]:.8f}\n"
-            )
+            values = [*before_2d[idx], *after_2d[idx]]
+            writer.writerow([idx, label, *(f"{value:.8f}" for value in values)])
 
 
 def main() -> None:
@@ -167,8 +167,8 @@ def main() -> None:
 
     fig, axes = plt.subplots(1, 2, figsize=(11, 4.8), constrained_layout=True)
     for ax, points, title in [
-        (axes[0], before_2d, "Before CNN: flatten([B*m, 2, n])"),
-        (axes[1], after_2d, "After CNN: flatten([B*m, 64, n])"),
+        (axes[0], before_2d, f"Before CNN: flatten([B*m, {shapes['cnn_input_row_tensor'][1]}, n])"),
+        (axes[1], after_2d, f"After CNN: flatten([B*m, {shapes['cnn_output_row_tensor'][1]}, n])"),
     ]:
         scatter = ax.scatter(points[:, 0], points[:, 1], c=colors, cmap=cmap, s=18, alpha=0.82, linewidths=0)
         ax.set_title(title)

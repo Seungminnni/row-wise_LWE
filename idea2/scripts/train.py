@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import csv
 import json
+import random
 import shlex
 import sys
 import time
@@ -168,6 +170,8 @@ def write_json(path: Path, value: object) -> None:
 
 
 def run_all_zero(args: argparse.Namespace) -> None:
+    if args.h_setting != "fixed_h":
+        raise ValueError("The analytic all_zero baseline requires --h-setting fixed_h.")
     metrics = all_zero_baseline_metrics(args.n, args.fixed_h)
     run_name = args.run_name or f"n{args.n}_h{args.fixed_h}_all_zero"
     run_dir = args.output_dir / run_name
@@ -180,28 +184,36 @@ def run_all_zero(args: argparse.Namespace) -> None:
 
 def main() -> None:
     args = parse_args()
+    random.seed(args.seed)
+    torch.manual_seed(args.seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(args.seed)
     if args.input_mode == "all_zero":
         run_all_zero(args)
         return
     if args.h_setting != "fixed_h" and args.decode == "top_h":
         raise ValueError("top_h decoding currently requires fixed_h.")
+    if args.epochs <= 0:
+        raise ValueError("epochs must be positive.")
     if args.run_name is None:
         args.run_name = default_run_name(args)
 
     run_dir = args.output_dir / args.run_name
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / "command.txt").write_text(" ".join(shlex.quote(arg) for arg in sys.argv) + "\n")
-    log_handle = (run_dir / "train.log").open("a")
-    sys.stdout = Tee(sys.stdout, log_handle)
-    sys.stderr = Tee(sys.stderr, log_handle)
+    with (run_dir / "train.log").open("a") as log_handle:
+        with contextlib.redirect_stdout(Tee(sys.stdout, log_handle)), contextlib.redirect_stderr(Tee(sys.stderr, log_handle)):
+            train_model(args, run_dir)
 
+
+def train_model(args: argparse.Namespace, run_dir: Path) -> None:
     if args.device == "auto":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
         device = torch.device(args.device)
     print(f"Using device: {device}")
 
-    train_loader = DataLoader(make_dataset(args, args.num_train, 11), batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=device.type == "cuda")
+    train_loader = DataLoader(make_dataset(args, args.num_train, 11), batch_size=args.batch_size, shuffle=True, num_workers=args.num_workers, pin_memory=device.type == "cuda", generator=torch.Generator().manual_seed(args.seed))
     val_loader = DataLoader(make_dataset(args, args.num_val, 23), batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=device.type == "cuda")
     test_loader = DataLoader(make_dataset(args, args.num_test, 37), batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers, pin_memory=device.type == "cuda")
 
@@ -238,7 +250,7 @@ def main() -> None:
         if score > best_score:
             best_score = score
             best_epoch = epoch
-            best_state = {key: value.detach().cpu() for key, value in model.state_dict().items()}
+            best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
         row: dict[str, object] = {"epoch": epoch, "train_loss": train_loss, "val_loss": val_loss, "epoch_time_sec": epoch_time}
         row.update({f"train_{key}": value for key, value in train_metrics.items()})
         row.update({f"val_{key}": value for key, value in val_metrics.items()})

@@ -7,17 +7,14 @@ import torch
 from torch.utils.data import DataLoader
 
 if __package__ in (None, ""):
-    import sys
-
-    sys.path.append(str(Path(__file__).resolve().parent.parent))
-    from lwe_image_experiment.data import (
+    from data import (
         DatasetSpec,
         SyntheticLWEDataset,
         centered_mod,
     )
-    from lwe_image_experiment.metrics import batch_statistics, centered_residual, finalize_statistics
-    from lwe_image_experiment.models import build_model
-    from lwe_image_experiment.train import normalize_args, require_cuda_device, train_single_seed
+    from metrics import batch_statistics, centered_residual, finalize_statistics
+    from models import build_model
+    from train import normalize_args, require_cuda_device, train_single_seed
 else:
     from .data import DatasetSpec, SyntheticLWEDataset, centered_mod
     from .metrics import batch_statistics, centered_residual, finalize_statistics

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from pathlib import Path
@@ -132,7 +133,7 @@ def tsne_2d(x: np.ndarray, seed: int, perplexity: float, max_iter: int) -> np.nd
         n_components=2,
         init="pca",
         learning_rate="auto",
-        perplexity=min(perplexity, max(5.0, (x.shape[0] - 1) / 3.0)),
+        perplexity=min(perplexity, max(1.0, (x.shape[0] - 1) / 3.0)),
         random_state=seed,
         max_iter=max_iter,
     ).fit_transform(x)
@@ -144,13 +145,12 @@ def colors_for(labels: list[str]) -> np.ndarray:
 
 
 def save_coordinates(path: Path, before_2d: np.ndarray, after_2d: np.ndarray, labels: list[str]) -> None:
-    with path.open("w") as handle:
-        handle.write("sample,label,before_x,before_y,after_x,after_y\n")
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["sample", "label", "before_x", "before_y", "after_x", "after_y"])
         for idx, label in enumerate(labels):
-            handle.write(
-                f"{idx},{label},{before_2d[idx, 0]:.8f},{before_2d[idx, 1]:.8f},"
-                f"{after_2d[idx, 0]:.8f},{after_2d[idx, 1]:.8f}\n"
-            )
+            values = [*before_2d[idx], *after_2d[idx]]
+            writer.writerow([idx, label, *(f"{value:.8f}" for value in values)])
 
 
 def main() -> None:
@@ -171,9 +171,9 @@ def main() -> None:
     color = colors_for(labels)
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5), constrained_layout=True)
     axes[0].scatter(before_2d[:, 0], before_2d[:, 1], c=color, cmap="tab20", s=16, alpha=0.78, linewidths=0)
-    axes[0].set_title("relation_pair before CNN\nflatten([B*m, 2, n])")
+    axes[0].set_title(f"relation_pair before CNN\nflatten([B*m, {shapes['cnn_input_row_tensor'][1]}, n])")
     axes[1].scatter(after_2d[:, 0], after_2d[:, 1], c=color, cmap="tab20", s=16, alpha=0.78, linewidths=0)
-    axes[1].set_title("relation_pair after CNN\nflatten([B*m, 64, n])")
+    axes[1].set_title(f"relation_pair after CNN\nflatten([B*m, {shapes['cnn_output_row_tensor'][1]}, n])")
     for ax in axes:
         ax.set_xticks([])
         ax.set_yticks([])

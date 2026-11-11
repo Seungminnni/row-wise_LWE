@@ -1,7 +1,13 @@
-# LWE ViT
+# Row-wise LWE Transformer and CNN Experiments
 
 Relation-preserving encoders for experiments that predict an LWE secret `s`
 from `A, b` where `b = A s + e (mod q)`.
+
+The source is published for inspection. Use, reuse, modification, and
+redistribution require prior written permission from the relevant rights
+holder(s) or their authorized representative, except where permitted by
+applicable law or GitHub's Terms of Service. See [LICENSE](../LICENSE).
+The installation and execution examples below are for authorized users.
 
 The initial implementation focuses on small fixed LWE parameters and provides:
 
@@ -18,16 +24,17 @@ training loss unless `--residual-loss-weight` is set above `0`.
 
 ## Quick Check
 
-Use the existing `lattice_env` environment:
+Install the project dependencies from the repository root as described in the
+[main README](../README.md#설치와-검증), then run these commands from `idea1/`:
 
 ```bash
-/home/yu_mcc/miniconda3/envs/lattice_env/bin/python -m unittest discover -s tests
+python -m unittest discover -s tests -v
 ```
 
 Run a tiny overfit sanity check:
 
 ```bash
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/sanity_overfit.py
+python scripts/sanity_overfit.py
 ```
 
 Run the metric-rich row-block trainer. This is now the main path: it builds
@@ -36,7 +43,7 @@ flattens row/column blocks into Transformer tokens. With `n=16` and
 `--block-cols 16`, each data token contains one full LWE equation row.
 
 ```bash
-PYTHONPATH=src /home/yu_mcc/miniconda3/envs/lattice_env/bin/python scripts/train_lwe_vit.py \
+python scripts/train_lwe_vit.py \
   --model row_block \
   --h-setting fixed_h --fixed-h 2 \
   --n 16 --m 128 --q 257 \
@@ -66,3 +73,12 @@ The active model set is intentionally small:
 - `--model row_block`: ViT-style relation-grid block tokens
 - `--model equation_transformer`: plain row-equation Transformer
 - `--model row_cnn`: row-local CNN over the same relation rows
+
+The image encoder and patch tokenizer are available as library utilities. The
+three training models build their inputs directly from `A,b`; their effective
+encoding is selected by `--residue-encoding`. The legacy `--representation`,
+`--no-broadcast-b`, and `--no-rhs-column` flags do not change those model inputs.
+
+For the conference CNN representation ablations, see [idea2](../idea2/README.md).
+The two related conference papers and their BibTeX entries are listed in the
+[main README](../README.md#관련-논문과-인용) and [references.bib](../references.bib).

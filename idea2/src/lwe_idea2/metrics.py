@@ -156,6 +156,8 @@ def binary_support_metrics(
 
 
 def all_zero_baseline_metrics(n: int, h: int) -> dict[str, float]:
+    if n <= 0 or not 0 <= h <= n:
+        raise ValueError("n must be positive and h must be in [0,n].")
     coord_acc = float(n - h) / float(n)
     exact_match = 1.0 if h == 0 else 0.0
     return {
