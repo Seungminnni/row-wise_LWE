@@ -20,6 +20,8 @@ b = A s + e (mod q)
 
 GitHub 서비스 약관에 따라 이미 부여되는 플랫폼 내 이용권(열람 및 fork 등)과 관련 법령에서 허용하는 행위는 위 제한의 대상에서 제외됩니다. 논문을 인용하는 것만으로 재현 범위를 넘어서는 사용 허락이 부여되지는 않으며, 본 공지는 위 재현 범위를 넘어서는 특허권이나 출원 중인 특허의 실시를 허락하지 않습니다.
 
+해당 프로젝트는 영남대학교 산학협력단 및 저자들에게 권한이 있습니다.
+
 사용 허락은 저장소 관리자에게 문의해 주십시오. 자세한 조건은 [LICENSE](LICENSE)에 명시되어 있습니다.
 
 ## 저장소 구성
@@ -163,7 +165,7 @@ python scripts/train.py \
 
 ## 관련 논문과 인용
 
-이 저장소의 관계 보존형 CNN 입력 표현과 희소 LWE 비밀키 복구 실험에 관한 학술대회 논문이다. 두 논문 모두 DOI가 없다. 인용용 BibTeX는 [references.bib](references.bib)에 제공한다.
+이 저장소의 관계 보존형 CNN 입력 표현과 희소 LWE 비밀키 복구 실험에 관한 학술대회 논문이다. 인용용 BibTeX는 [references.bib](references.bib)에 제공한다.
 
 1. Seungmin-Lee, Jian-Woo, & Sejong-Lee (2026-07-09). A Convolutional Secret Recovery Model Based on Relation-Preserved LWE Samples. Proceedings of the Korean Society of Computer Information Conference, Jeju.
 
